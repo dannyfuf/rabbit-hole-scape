@@ -1,88 +1,5 @@
 local M = {}
 
--- Store the unique jumps for use in jump_to_selected
-local unique_jumps = {}
-
--- Function to get the jumplist
-local function get_jumplist()
-	local jumplist = vim.fn.getjumplist()
-	return jumplist[1], jumplist[2] -- Returns the list and current position
-end
-
--- Function to find or create the jumplist buffer
-local function find_or_create_jumplist_buffer()
-	-- Check if buffer already exists
-	local bufname = "Rabbit Hole Scape - Jumplist"
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.api.nvim_buf_get_name(buf):match(bufname) then
-			-- Buffer exists, check if it's displayed in a window
-			for _, win in ipairs(vim.api.nvim_list_wins()) do
-				if vim.api.nvim_win_get_buf(win) == buf then
-					-- Buffer is displayed, focus that window
-					vim.api.nvim_set_current_win(win)
-					return buf
-				end
-			end
-			-- Buffer exists but not displayed, reuse it
-			return buf
-		end
-	end
-
-	-- Create a new buffer
-	local buf = vim.api.nvim_create_buf(false, true)
-
-	-- Use a unique name with a timestamp to avoid conflicts
-	local unique_name = bufname .. " " .. os.time()
-	pcall(vim.api.nvim_buf_set_name, buf, unique_name)
-
-	return buf
-end
-
--- Function to jump to the selected location in the jumplist
-function M.jump_to_selected()
-	local line = vim.fn.line(".")
-
-	-- Calculate index in unique jumplist
-	local jump_index = line
-
-	if not unique_jumps[jump_index] then
-		vim.api.nvim_echo({ { "Error: Invalid jump selection", "ErrorMsg" } }, false, {})
-		return
-	end
-
-	local jump = unique_jumps[jump_index]
-	local filepath = jump.filepath
-
-	-- Close the jumplist window
-	vim.cmd("close")
-
-	-- Check if file exists
-	if vim.fn.filereadable(filepath) == 0 then
-		vim.api.nvim_echo({ { "Error: File does not exist: " .. filepath, "ErrorMsg" } }, false, {})
-		return
-	end
-
-	-- Edit the file
-	vim.cmd("edit " .. vim.fn.fnameescape(filepath))
-
-	-- Get the number of lines in the buffer
-	local line_count = vim.api.nvim_buf_line_count(0)
-	
-	-- Ensure the line number is valid
-	if jump.lnum > line_count then
-		jump.lnum = line_count
-	end
-
-	-- Set cursor position
-	vim.api.nvim_win_set_cursor(0, { jump.lnum, jump.col })
-
-	-- Center the cursor in the window
-	vim.cmd("normal! zz")
-
-	-- Print a message to confirm the jump
-	vim.api.nvim_echo({ { "Jumped to " .. filepath, "Normal" } }, false, {})
-end
-
 -- Function to create a buffer and display the jumplist
 function M.show_jumplist()
 	local buffer = require("rabbit-hole-scape.core.buffer")
@@ -205,6 +122,11 @@ function M.show_jumplist()
 
 	-- Set up buffer-specific keymaps
 	buffer.setup_buffer_keymaps(buf)
+end
+
+-- Function to jump to selected location
+function M.jump_to_selected()
+	require("rabbit-hole-scape.core.navigation").jump_to_selected()
 end
 
 -- Function to clear the jumplist

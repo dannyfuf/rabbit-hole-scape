@@ -9,7 +9,8 @@ function M.jump_to_selected()
     -- Calculate index in unique jumplist
     local jump_index = line
 
-    if not unique_jumps[jump_index] then
+    -- Validate jump index
+    if jump_index < 1 or jump_index > #unique_jumps then
         vim.api.nvim_echo({ { "Error: Invalid jump selection", "ErrorMsg" } }, false, {})
         return
     end
