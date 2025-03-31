@@ -32,7 +32,7 @@ Using your favorite package manager:
 ```lua
 -- lazy.nvim
 {
-    "your-username/rabbit-hole-return",
+    "dannyfuf/rabbit-hole-return",
     config = function()
         require("rabbit-hole-return").setup()
     end,
