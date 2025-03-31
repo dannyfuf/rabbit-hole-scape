@@ -28,7 +28,7 @@ This plugin was vibe-coded, which means:
 ## 🎮 Default Keymaps
 
 - `<leader>rl` - Show the jump list
-- `ro` - Jump to selected file (when in the jump list)
+- `<Enter>` - Jump to selected file (when in the jump list)
 - `<leader>rc` - Clear the jump list
 - `<ESC>` or `q` - Close the jump list
 
