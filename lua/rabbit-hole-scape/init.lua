@@ -85,11 +85,15 @@ end
 
 -- Function to create a buffer and display the jumplist
 function M.show_jumplist()
+	local buffer = require("rabbit-hole-scape.core.buffer")
+	local jumplist = require("rabbit-hole-scape.core.jumplist")
+	local path = require("rabbit-hole-scape.utils.path")
+
 	-- Find or create the buffer
-	local buf = find_or_create_jumplist_buffer()
+	local buf = buffer.find_or_create_jumplist_buffer()
 
 	-- Get jumplist
-	local jumps, current_jump = get_jumplist()
+	local jumps, current_jump = jumplist.get_jumplist()
 
 	-- Check if jumplist is empty
 	if #jumps == 0 then
@@ -106,7 +110,7 @@ function M.show_jumplist()
 	-- Track seen files to avoid duplicates while preserving order
 	local seen_files = {}
 	-- Clear previous unique jumps
-	unique_jumps = {}
+	local unique_jumps = {}
 	local unique_jump_indices = {}
 
 	-- First pass: collect unique files in order
@@ -120,10 +124,10 @@ function M.show_jumplist()
 		end
 
 		-- Get absolute path of the file
-		local abs_path = vim.fn.fnamemodify(filename, ':p')
+		local abs_path = path.get_absolute_path(filename)
 
 		-- Only include files that are within the project directory
-		if vim.fn.fnamemodify(abs_path, ':h'):match(project_dir) then
+		if path.is_in_project_dir(abs_path, project_dir) then
 			-- Use full path as key to track unique files
 			if not seen_files[filename] then
 				seen_files[filename] = true
@@ -139,6 +143,9 @@ function M.show_jumplist()
 		::continue::
 	end
 
+	-- Store unique jumps for use in jump_to_selected
+	jumplist.set_unique_jumps(unique_jumps)
+
 	-- Check if we found any files in the project
 	if #unique_jumps == 0 then
 		table.insert(lines, "No files found in current project")
@@ -150,7 +157,7 @@ function M.show_jumplist()
 			local filename = jump.filepath
 
 			-- Convert to relative path for display
-			local rel_path = vim.fn.fnamemodify(filename, ':~:.')
+			local rel_path = path.get_relative_path(filename)
 
 			local line = string.format("%s %3d: %s", marker, i, rel_path)
 			table.insert(lines, line)
@@ -161,9 +168,7 @@ function M.show_jumplist()
 	vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
 
 	-- Set buffer options
-	vim.api.nvim_buf_set_option(buf, "modifiable", false)
-	vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
-	vim.api.nvim_buf_set_option(buf, "filetype", "rabbit-hole-scape")
+	buffer.setup_buffer_options(buf)
 
 	-- Calculate the width needed for the content
 	local max_width = 0
@@ -199,16 +204,12 @@ function M.show_jumplist()
 	vim.api.nvim_win_set_option(popup_win, "winhl", "Normal:Normal,FloatBorder:FloatBorder")
 
 	-- Set up buffer-specific keymaps
-	local buf_opts = { noremap = true, silent = true }
-	vim.api.nvim_buf_set_keymap(buf, "n", "<CR>", ":lua require('rabbit-hole-scape').jump_to_selected()<CR>", buf_opts)
-	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":close<CR>", buf_opts)
-	vim.api.nvim_buf_set_keymap(buf, "n", "<ESC>", ":close<CR>", buf_opts)
+	buffer.setup_buffer_keymaps(buf)
 end
 
 -- Function to clear the jumplist
 function M.clear_jumplist()
-	vim.fn.clearmatches()
-	vim.api.nvim_echo({ { "Jumplist cleared", "Normal" } }, false, {})
+	require("rabbit-hole-scape.core.jumplist").clear_jumplist()
 end
 
 -- Setup function to initialize the plugin

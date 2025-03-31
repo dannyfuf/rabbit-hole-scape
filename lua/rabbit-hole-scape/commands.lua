@@ -6,14 +6,14 @@ M.commands = {
         name = "RabbitHoleList",
         description = "Show the jump list",
         callback = function()
-            require("rabbit-hole-return").show_jumplist()
+            require("rabbit-hole-scape").show_jumplist()
         end
     },
     open = {
         name = "RabbitHoleOpen",
         description = "Jump to selected file in the jump list",
         callback = function()
-            require("rabbit-hole-return").jump_to_selected()
+            require("rabbit-hole-scape").jump_to_selected()
         end
     },
     clear = {
