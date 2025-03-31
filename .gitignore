@@ -1,0 +1,16 @@
+# Lua
+*.lua~
+*.luac
+lua_modules/
+
+# Neovim
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/ 
