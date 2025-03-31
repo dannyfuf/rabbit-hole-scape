@@ -42,12 +42,6 @@ end
 function M.jump_to_selected()
 	local line = vim.fn.line(".")
 
-	-- First line is header
-	if line <= 1 then
-		vim.api.nvim_echo({ { "Cannot jump to header line", "ErrorMsg" } }, false, {})
-		return
-	end
-
 	-- Calculate index in unique jumplist (accounting for header line)
 	local jump_index = line - 1
 
