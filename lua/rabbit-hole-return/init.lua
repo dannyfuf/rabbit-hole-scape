@@ -211,41 +211,9 @@ function M.clear_jumplist()
 	vim.api.nvim_echo({ { "Jumplist cleared", "Normal" } }, false, {})
 end
 
--- Setup function to create commands and keymaps
+-- Setup function to initialize the plugin
 function M.setup(opts)
-	opts = opts or {}
-
-	-- Create user command
-	vim.api.nvim_create_user_command("RHList", function()
-		M.show_jumplist()
-	end, {})
-
-	-- Set up keymaps
-	local keymap = vim.keymap.set
-	local opts = { noremap = true, silent = true }
-
-	-- Keymap to open the files list
-	keymap('n', '<leader>rl', M.show_jumplist, opts)
-
-	-- Keymap to jump to selected file (only active in the jumplist buffer)
-	keymap('n', 'ro', function()
-		-- Check if we're in the jumplist buffer
-		local bufname = vim.api.nvim_buf_get_name(0)
-		if bufname:match("Rabbit Hole Return") then
-			M.jump_to_selected()
-		end
-	end, opts)
-
-	-- Keymap to clear the jumplist
-	keymap('n', '<leader>rc', M.clear_jumplist, opts)
-
-	-- Keymap to close the popup with ESC
-	keymap('n', '<ESC>', function()
-		local bufname = vim.api.nvim_buf_get_name(0)
-		if bufname:match("Rabbit Hole Return") then
-			vim.cmd("close")
-		end
-	end, opts)
+	require("rabbit-hole-return.commands").setup(opts)
 end
 
 return M

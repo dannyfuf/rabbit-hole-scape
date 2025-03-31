@@ -17,13 +17,38 @@ This plugin was vibe-coded, which means:
 - Clear jump history
 - Most recent files at the top
 - Project-scoped jumps (only shows files in your current project)
+- Customizable commands and keymaps
 
-## 🎮 Keymaps
+## 🎮 Commands
+
+- `:RabbitHoleList` - Show the jump list
+- `:RabbitHoleOpen` - Jump to selected file in the jump list
+- `:RabbitHoleClear` - Clear the jump list
+
+## 🎮 Default Keymaps
 
 - `<leader>rl` - Show the jump list
 - `ro` - Jump to selected file (when in the jump list)
 - `<leader>rc` - Clear the jump list
 - `<ESC>` or `q` - Close the jump list
+
+## ⚙️ Configuration
+
+You can customize the plugin's behavior through the setup function:
+
+```lua
+require("rabbit-hole-return").setup({
+    -- Disable all default keymaps
+    disable_keymaps = false,
+
+    -- Customize keymaps
+    keymaps = {
+        list = "<leader>j",  -- Custom keymap for showing the list
+        open = "<leader>o",  -- Custom keymap for opening selected file
+        clear = "<leader>c"  -- Custom keymap for clearing the list
+    }
+})
+```
 
 ## 🚀 Installation
 
