@@ -12,7 +12,7 @@ end
 -- Function to find or create the jumplist buffer
 local function find_or_create_jumplist_buffer()
 	-- Check if buffer already exists
-	local bufname = "Rabbit Hole Return - Jumplist"
+	local bufname = "Rabbit Hole Scape - Jumplist"
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		if vim.api.nvim_buf_get_name(buf):match(bufname) then
 			-- Buffer exists, check if it's displayed in a window
@@ -115,7 +115,7 @@ function M.show_jumplist()
 		local filename = vim.fn.bufname(jump.bufnr)
 		
 		-- Skip [No Name] buffers and oil:// files and jumplist buffers
-		if filename == "" or filename == "[No Name]" or filename:match("^oil://") or filename:match("Rabbit Hole Return") then
+		if filename == "" or filename == "[No Name]" or filename:match("^oil://") or filename:match("Rabbit Hole Scape") then
 			goto continue
 		end
 
@@ -163,7 +163,7 @@ function M.show_jumplist()
 	-- Set buffer options
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 	vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
-	vim.api.nvim_buf_set_option(buf, "filetype", "rabbit-hole-return")
+	vim.api.nvim_buf_set_option(buf, "filetype", "rabbit-hole-scape")
 
 	-- Calculate the width needed for the content
 	local max_width = 0
@@ -200,7 +200,7 @@ function M.show_jumplist()
 
 	-- Set up buffer-specific keymaps
 	local buf_opts = { noremap = true, silent = true }
-	vim.api.nvim_buf_set_keymap(buf, "n", "<CR>", ":lua require('rabbit-hole-return').jump_to_selected()<CR>", buf_opts)
+	vim.api.nvim_buf_set_keymap(buf, "n", "<CR>", ":lua require('rabbit-hole-scape').jump_to_selected()<CR>", buf_opts)
 	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":close<CR>", buf_opts)
 	vim.api.nvim_buf_set_keymap(buf, "n", "<ESC>", ":close<CR>", buf_opts)
 end
@@ -213,7 +213,7 @@ end
 
 -- Setup function to initialize the plugin
 function M.setup(opts)
-	require("rabbit-hole-return.commands").setup(opts)
+	require("rabbit-hole-scape.commands").setup(opts)
 end
 
 return M

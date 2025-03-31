@@ -1,19 +1,19 @@
--- Plugin initialization file for Rabbit Hole Return
+-- Plugin initialization file for Rabbit Hole Scape
 
 -- Check if Neovim version is compatible
 if vim.fn.has("nvim-0.7.0") == 0 then
-	vim.api.nvim_err_writeln("Rabbit Hole Return requires at least Neovim 0.7.0")
+	vim.api.nvim_err_writeln("Rabbit Hole Scape requires at least Neovim 0.7.0")
 	return
 end
 
 -- Prevent loading the plugin multiple times
-if vim.g.loaded_rabbit_hole_return == 1 then
+if vim.g.loaded_rabbit_hole_scape == 1 then
 	return
 end
-vim.g.loaded_rabbit_hole_return = 1
+vim.g.loaded_rabbit_hole_scape = 1
 
 -- Setup the plugin
-local rabbit_hole = require("rabbit-hole-return")
+local rabbit_hole = require("rabbit-hole-scape")
 rabbit_hole.setup()
 
 -- Create a global function for easier debugging

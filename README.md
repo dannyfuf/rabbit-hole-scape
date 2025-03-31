@@ -1,4 +1,4 @@
-# 🐰 Rabbit Hole Return
+# 🐰 Rabbit Hole Scape
 
 A vibe-coded Neovim plugin that helps you navigate through your jump history. Built with ✨ vibes ✨ and a sprinkle of chaos.
 
@@ -37,7 +37,7 @@ This plugin was vibe-coded, which means:
 You can customize the plugin's behavior through the setup function:
 
 ```lua
-require("rabbit-hole-return").setup({
+require("rabbit-hole-scape").setup({
     -- Disable all default keymaps
     disable_keymaps = false,
 
@@ -59,7 +59,7 @@ Using your favorite package manager:
 {
     "dannyfuf/rabbit-hole-scape",
     config = function()
-        require("rabbit-hole-return").setup()
+        require("rabbit-hole-scape").setup()
     end,
 }
 ```
