@@ -42,8 +42,8 @@ end
 function M.jump_to_selected()
 	local line = vim.fn.line(".")
 
-	-- Calculate index in unique jumplist (accounting for header line)
-	local jump_index = line - 1
+	-- Calculate index in unique jumplist
+	local jump_index = line
 
 	if not unique_jumps[jump_index] then
 		vim.api.nvim_echo({ { "Error: Invalid jump selection", "ErrorMsg" } }, false, {})
